@@ -12,7 +12,7 @@
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
 |   1 | Vũ Trọng Quang | 2A202603535 | trongquangvu2004@gmail.com | Quangvu256 | Single agent (shape B) |
-|   2 |        |      |       |        |         |
+|   2 | Nguyễn Hoàng Cương | 2A202603568 | olivercuongnguyen@gmail.com | olivercuongnguyen-ca | Orchestrator (shape C), benchmark |
 
 Gợi ý chia vai:
 
@@ -26,6 +26,7 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 | Vũ Trọng Quang (2A202603535) | Single agent (shape B) | `0907a74` (PR #3) | `src/tests/test_single_shape.py` |
+| Nguyễn Hoàng Cương (2A202603568) | Orchestrator (shape C), benchmark | `dd07988`, `b8fc761` | `src/tests/test_2A202603568_orchestrator.py`: `test_ticket_delay_never_changes_the_money`, `test_handoff_is_read_only_and_trace_has_no_secret`, `test_full_quote_is_passed_so_host_pays_only_the_difference`, `test_zero_quote_does_not_call_the_host`, `test_host_rejection_keeps_full_quote_and_audit` |
 
 ## Cá nhân
 

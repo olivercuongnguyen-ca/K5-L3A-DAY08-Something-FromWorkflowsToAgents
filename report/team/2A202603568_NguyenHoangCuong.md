@@ -11,7 +11,7 @@
 
 - Shape C `orchestrator` (`src/lab8/shapes/orchestrator.py`): orchestrator đọc claim, dựng handoff cho investigator chỉ có tool đọc, rồi tự gọi `durability.issue_refund`.
 - Benchmark 4 shape x 5 seed trên bộ public và crash suite (`src/reports/benchmark.json`, `src/reports/crash.json`).
-- Điền các tài liệu team (`report/team/decision_adr.md`, `report/team/group_report.md`).
+- Điền `report/team/decision_adr.md`.
 
 ## 3. Đóng góp cụ thể
 
@@ -34,12 +34,18 @@ Quyết định kỹ thuật trong `orchestrator.py`:
 - Mọi nhánh return đi qua `finish()` nên luôn có trace đúng contract và `refund_effects` lấy từ ledger.
 - Chỉ dùng một lời gọi model `draft` để soạn chữ trả lời. Model không quyết định tiền.
 
-Test đã thêm hoặc sửa:
+Test đã thêm hoặc sửa: `src/tests/test_2A202603568_orchestrator.py` (không gắn marker `student`, chạy trong cổng host):
+
+- `test_ticket_delay_never_changes_the_money`: ticket C-002 ghi trễ 5 ngày nhưng order ghi 2 ngày, orchestrator phải `denied` ở cả 5 seed (swarm tin ticket và trả 20.000 ở seed 55).
+- `test_handoff_is_read_only_and_trace_has_no_secret`: handoff chỉ có tool đọc, `facts` rỗng; trace không chứa secret, PII hay nội dung ticket.
+- `test_full_quote_is_passed_so_host_pays_only_the_difference`: T14, `proposal_amount` 150.000 và ledger 120.000.
+- `test_zero_quote_does_not_call_the_host`: quote bằng 0 thì không có audit và không có dòng ledger.
+- `test_host_rejection_keeps_full_quote_and_audit`: T07, approval hết hạn thì `denied`, quote giữ 35.000, có audit `policy_denied`.
 
 ## 4. Bằng chứng
 
 - `python -m pytest -q -m student -o addopts= -k orchestrator` ra `62 passed`.
-- Cổng host `python -m pytest -q` ra `54 passed` (Python 3.12.16).
+- Cổng host `python -m pytest -q` ra `63 passed` (Python 3.12.16), gồm 9 test mới của `test_2A202603568_orchestrator.py`.
 - `python -m lab8.crash_test --count 20 --out reports/crash.json` ra `crash_safety` = `20/20`.
 - Benchmark public, 14 claim x 5 seed, `src/reports/benchmark.json`:
 
