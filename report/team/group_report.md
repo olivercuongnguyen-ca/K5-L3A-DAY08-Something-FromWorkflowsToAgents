@@ -6,7 +6,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 - Tên nhóm: Something (lớp L3A)
 - Thành viên: xem `TEAM.md`
-- Commit chốt (trùng `report/team/decision_adr.md`): điền hash của commit cuối cùng sau khi commit xong (hiện `decision_adr.md` đang ghi `48f1f57`, đã cũ).
+- Commit chốt (trùng `report/team/decision_adr.md`): `f882a82`
 
 ## 2. Mục tiêu và cách tiếp cận
 
