@@ -12,6 +12,8 @@
 - Shape C `orchestrator` (`src/lab8/shapes/orchestrator.py`): orchestrator đọc claim, dựng handoff cho investigator chỉ có tool đọc, rồi tự gọi `durability.issue_refund`.
 - Benchmark 4 shape x 5 seed trên bộ public và crash suite (`src/reports/benchmark.json`, `src/reports/crash.json`).
 - Điền `report/team/decision_adr.md`.
+- Bonus B3 (swarm + verifier bằng code): `src/bonus/`, `src/tests/test_bonus_swarm_verified.py`, `src/reports/bonus_*.json`, `report/team/bonus_report.md`.
+- Báo cáo nhóm: `report/team/research_card.md` (R1) và `report/team/group_report.md`.
 
 ## 3. Đóng góp cụ thể
 
@@ -23,6 +25,9 @@ Commit chính:
 | `b8fc761` | `done benchmark`: sinh `benchmark.json` và `crash.json` bằng `lab8.benchmark` và `lab8.crash_test` |
 | `01a8175` | `update benchmark for swarm`: chạy lại benchmark có shape swarm |
 | `9e719a2` | `fill decision_adr`: điền ADR và tên nhóm trong `TEAM.md` |
+| `48f1f57` | `demo bonus`: `swarm_verified.py`, 11 claim đối kháng và world tự viết |
+| `339325a` | `done research card`: phiếu nghiên cứu R1 |
+| `9a3168e` | `done bonus report`: `bonus_report.md` |
 
 Quyết định kỹ thuật trong `orchestrator.py`:
 
@@ -42,6 +47,8 @@ Test đã thêm hoặc sửa: `src/tests/test_2A202603568_orchestrator.py` (khô
 - `test_zero_quote_does_not_call_the_host`: quote bằng 0 thì không có audit và không có dòng ledger.
 - `test_host_rejection_keeps_full_quote_and_audit`: T07, approval hết hạn thì `denied`, quote giữ 35.000, có audit `policy_denied`.
 
+Bonus B3 (`src/bonus/swarm_verified.py`): giữ nguyên swarm (kể cả điểm yếu seed % 5 == 0 tin ticket) và thêm bước `_verify` trước khi ghi. Verifier đọc lại order có cấu trúc, so `status`, `delay_days`, `damage_verified`, phí ship và số tiền đã trả với dữ kiện dùng để quote; nếu lệch thì quote lại từ dữ liệu có cấu trúc (tối đa 1 vòng) và ghi `verifier_override` vào trace. Kết quả: pass rate về 1.000, nhưng cost/success cao hơn workflow khoảng 68–88%, nên verifier thay luôn phần quyết định và swarm gần như không còn giá trị riêng. Giới hạn: lỗi của swarm là quy tắc cố định, không phải lỗi thật của model.
+
 ## 4. Bằng chứng
 
 - `python -m pytest -q -m student -o addopts= -k orchestrator` ra `62 passed`.
@@ -57,11 +64,23 @@ Test đã thêm hoặc sửa: `src/tests/test_2A202603568_orchestrator.py` (khô
 | swarm | 0.986 | 0.929 | 0.000816 | 49.57 |
 
 - Run id ví dụ: `R-orchestrator-C-001-s11`.
+- Bonus B3: `python -m pytest -q tests/test_bonus_swarm_verified.py` ra `61 passed`; `python -m pytest -q` ra `150 passed`. Benchmark swarm, swarm_verified và workflow ghi vào `reports/bonus_public.json` (14 claim x 5 seed) và `reports/bonus_adversarial.json` (11 claim x 5 seed):
+
+| Bộ | Shape | Pass rate | pass^5 | Cost/success (VND, mô phỏng) |
+| --- | --- | --- | --- | --- |
+| Public | swarm | 0.986 | 0.929 | 49.57 |
+| Public | swarm_verified | 1.000 | 1.000 | 57.57 |
+| Tự viết | swarm | 0.891 | 0.455 | 59.27 |
+| Tự viết | swarm_verified | 1.000 | 1.000 | 63.35 |
+| Tự viết | workflow | 1.000 | 1.000 | 33.64 |
+
+- Trace minh họa `R-swarm_verified-B-01-s55`: order trễ 2 ngày, swarm tin ticket (7 ngày) và quote 22.000; verifier phát hiện lệch và quote lại về 0, claim `denied`.
+- `check_submission` ra 0 FAIL.
 - Quét `CANARY_SECRET`, `parent_secret`, `raw_headers` trên `src/traces` (280 file) và `src/reports` cho kết quả rỗng.
 
 ## 5. Công cụ AI đã dùng
 
-- Claude Code: giải thích luật nghiệp vụ và contract, hướng dẫn từng bước viết `orchestrator.py`, tìm nguyên nhân hai test benchmark đỏ (lệch version do dùng Python 3.9, cần 3.11 trở lên).
+- Claude Code: giải thích luật nghiệp vụ và contract, hướng dẫn từng bước viết `orchestrator.py`, tìm nguyên nhân hai test benchmark đỏ (lệch version do dùng Python 3.9, cần 3.11 trở lên). Viết test bonus, chạy benchmark.
 - Cách tự kiểm tra: tự gõ và chạy `orchestrator.py`, tự chạy 62 test student của shape, cổng host, crash suite và benchmark. Đối chiếu số liệu trong ADR và báo cáo này với `reports/benchmark.json` và `reports/crash.json` do script sẵn sinh ra. Đọc lại `workflow.py` để xác nhận danh sách event trace trong ADR đúng với code, và ADR đã được sửa hai chỗ sai sau lần đối chiếu đó.
 
 ## 6. Tự đánh giá
