@@ -43,7 +43,7 @@ Báo cáo chi tiết: [report/team/2A202603535_VuTrongQuang.md](report/team/2A20
 ### Bằng chứng
 
 - Commit `0907a74`, merge qua PR #3 (`13013af`).
-- `python -m pytest -q -m student -o addopts=` → `248 passed`; `python -m pytest -q` → xanh.
+- `python -m pytest -q -m student -o addopts=` -> `248 passed`; `python -m pytest -q` -> xanh.
 - `reports/benchmark.json`, shape `single`: pass_rate 1.0, pass^5 1.0, variance 0.0, cost/success 38.73 VND (mô phỏng).
 - Run id: `R-single-C-014-s11`, `R-single-C-004-s11`, `R-single-C-005-s11`.
 
@@ -93,7 +93,7 @@ Báo cáo chi tiết: [report/team/2A202603568_NguyenHoangCuong.md](report/team/
 ### Bằng chứng
 
 - Commit `dd07988` (orchestrator), `b8fc761` (benchmark, crash), `af4df40` (hidden claims và test cá nhân).
-- `python -m pytest -q -m student -o addopts=` → `248 passed`; `python -m pytest -q` → xanh.
+- `python -m pytest -q -m student -o addopts=` -> `248 passed`; `python -m pytest -q` -> xanh.
 - `reports/crash.json`: `crash_safety` = `20/20`.
 - `reports/benchmark.json`, shape `orchestrator`: pass_rate 1.0, pass^5 1.0, variance 0, cost/success 56.65 VND (mô phỏng); workflow 34.29 VND.
 - Run id: `R-orchestrator-C-001-s11`.
