@@ -4,43 +4,28 @@
 
 - Tên nhóm: Something
 - Lớp: L3A
-- Repo nhóm: `K5-L3A-DAY08-Something-FromWorkflowsToAgents` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Repo nhóm: `K5-L3A-DAY08-Something-FromWorkflowsToAgents`
+- URL repo: https://github.com/olivercuongnguyen-ca/K5-L3A-DAY08-Something-FromWorkflowsToAgents
+- Nhánh cá nhân: `giang`
+- Commit cá nhân: `93c0930` (C8 – Add workflow unknown claim test)
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 | Vũ Trọng Quang | 2A202603535 | trongquangvu2004@gmail.com | Quangvu256 | Single agent (shape B) |
-|   2 | Nguyễn Hoàng Cương | 2A202603568 | olivercuongnguyen@gmail.com | olivercuongnguyen-ca | Orchestrator (shape C), benchmark |
-
-Gợi ý chia vai:
-
-- Nhóm 6 người: integration; workflow; single agent; orchestrator; ledger/policy/crash; eval/report.
-- Nhóm 4 người: workflow + integration; single; orchestrator + handoff; ledger + evaluation.
+| 1 | Vũ Trọng Quang | 2A202603535 | trongquangvu2004@gmail.com | Quangvu256 | Single agent (shape B) |
+| 2 | Nguyễn Thị Hương Giang | 2A202603538 | 26ai.giangnth3@vinuni.edu.vn | nthgiang311 | Deterministic Workflow (shape A) |
 
 ## Bảng đóng góp
 
-`python -m lab8.check_submission` đọc bảng này bằng máy: giữ nguyên tiêu đề `## Bảng đóng góp` và các cột. Mỗi người một dòng: commit có nội dung và ít nhất một test đã thêm hoặc sửa.
-
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Vũ Trọng Quang (2A202603535) | Single agent (shape B) | `0907a74` (PR #3) | `src/tests/test_single_shape.py` |
-| Nguyễn Hoàng Cương (2A202603568) | Orchestrator (shape C), benchmark | `dd07988`, `b8fc761` | `src/tests/test_2A202603568_orchestrator.py`: `test_ticket_delay_never_changes_the_money`, `test_handoff_is_read_only_and_trace_has_no_secret`, `test_full_quote_is_passed_so_host_pays_only_the_difference`, `test_zero_quote_does_not_call_the_host`, `test_host_rejection_keeps_full_quote_and_audit` |
+| Vũ Trọng Quang (2A202603535) | Single agent (shape B) | `0907a74` (PR #3) | `src/tests/test_2A202603535_single_shape.py`: `test_cp3_t11_retry_same_claim_is_one_refund`, `test_cp3_t12_crash_is_not_swallowed_and_resume_is_once`, `test_cp4_crash_point_never_creates_two_refunds`, `test_cp4_t07_expired_approval_no_refund`, `test_cp4_t13_fully_refunded_order_no_refund`, `test_cp4_no_secret_or_raw_row_in_trace_or_stdout`, `test_cp2_*` (trace, needs_info, cap T14); `src/tests/test_2A202603535_single_guardrails.py`: `test_single_approval_of_other_claim_is_blocked`, `test_single_missing_approval_no_refund`, `test_single_ledger_amount_conflict_does_not_write_second_refund`, `test_single_unknown_claim_fails_with_trace`, `test_single_step_cap_fails_closed` |
+| Nguyễn Thị Hương Giang (2A202603538) | Deterministic Workflow (shape A) | `51db0c9`, `abcfc5b`, `93c0930` | `src/tests/test_202603404_workflow_unknown_claim.py` – `test_workflow_unknown_claim_does_not_create_refund` |
 
 ## Cá nhân
 
-Mỗi thành viên đồng thời tạo một báo cáo riêng trong `report/` theo dạng:
-
-```text
-report/team/MSSV_HoTen.md
-```
-
-Ví dụ: `report/team/20241234_NguyenVanAn.md`.
-
-Sao chép mục dưới đây cho từng thành viên.
-
-## 2A202603535_VuTrongQuang
+### 2A202603535_VuTrongQuang
 
 Báo cáo chi tiết: [report/team/2A202603535_VuTrongQuang.md](report/team/2A202603535_VuTrongQuang.md).
 
@@ -62,16 +47,28 @@ Báo cáo chi tiết: [report/team/2A202603535_VuTrongQuang.md](report/team/2A20
 - `reports/benchmark.json`, shape `single`: pass_rate 1.0, pass^5 1.0, variance 0.0, cost/success 38.73 VND (mô phỏng).
 - Run id: `R-single-C-014-s11`, `R-single-C-004-s11`, `R-single-C-005-s11`.
 
-## MSSV_HoTen
+### 2A202603538_NguyenThiHuongGiang
+
+Báo cáo chi tiết: [report/team/2A202603538_NguyenThiHuongGiang.md](report/team/2A202603538_NguyenThiHuongGiang.md).
 
 ### Phần việc phụ trách
 
--
+- Shape A — Deterministic Workflow: `src/lab8/shapes/workflow.py` (CP2, CP3).
+- Bổ sung kiểm thử hành vi workflow theo yêu cầu C8.
+- Chạy kiểm thử và hidden benchmark self-check cho ba kiến trúc workflow, single và orchestrator.
 
 ### Đóng góp cụ thể
 
--
+- CP2: triển khai `run_claim()` theo luồng xác định: đọc claim, kiểm tra thông tin, tra cứu đơn hàng, kiểm tra quyền truy cập, tính toán khoản bồi thường và thực hiện hoàn tiền. Xử lý các trạng thái `needs_info`, `escalated`, `denied`, `resolved` và `failed`. Sử dụng `compute_compensation()` để tính số tiền thay vì để LLM tự quyết định.
+- CP3: truyền `crash_at` xuống `issue_refund()`, không bắt và nuốt ngoại lệ `InjectedCrash`, giữ nguyên cơ chế xử lý crash và retry của durability layer.
+- C8: thêm test `test_workflow_unknown_claim_does_not_create_refund()` để xác nhận claim không tồn tại phải trả về `failed`, không tạo refund effect và không ghi nhận audit hoàn tiền.
 
 ### Bằng chứng
 
--
+- Commit `51db0c9` – Implement deterministic workflow shape.
+- Commit `abcfc5b` – Implement workflow crash recovery.
+- Commit `93c0930` – Add workflow unknown claim test.
+- Kiểm thử workflow: `62 passed, 240 deselected`.
+- Kiểm thử riêng C8: `1 passed`.
+- Kiểm thử toàn bộ test suite: `55 passed, 248 deselected`.
+- Hidden benchmark self-check: 200 trials cho mỗi kiến trúc; workflow có mean steps 3.55, mean model calls 0, tổng simulated cost 7,050 VND; không ghi nhận error trials hoặc leak suspect trials. Dữ liệu không có nhãn nên không tính được pass rate chính thức.
