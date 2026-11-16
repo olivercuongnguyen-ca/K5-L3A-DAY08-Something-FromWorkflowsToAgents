@@ -214,5 +214,5 @@ Qua bài lab, tôi có thêm kinh nghiệm triển khai workflow bằng Python, 
 | Kết quả kiểm thử | `62 passed` cho workflow; `55 passed` cho toàn bộ test suite |
 | Hidden benchmark | `src/reports/hidden_selfcheck.json` (kết quả tự kiểm, không nhãn) |
 
-**GitHub:** https://github.com/nthgiang311/K5-L3A-DAY08-Something-FromWorkflowsToAgents
+
 
