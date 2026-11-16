@@ -25,7 +25,7 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| Vũ Trọng Quang (2A202603535) | Single agent (shape B) | `0907a74` (PR #3) | `src/tests/test_single_shape.py` |
+| Vũ Trọng Quang (2A202603535) | Single agent (shape B) | `0907a74` (PR #3) | `src/tests/test_2A202603535_single_shape.py`: `test_cp3_t11_retry_same_claim_is_one_refund`, `test_cp3_t12_crash_is_not_swallowed_and_resume_is_once`, `test_cp4_crash_point_never_creates_two_refunds`, `test_cp4_t07_expired_approval_no_refund`, `test_cp4_t13_fully_refunded_order_no_refund`, `test_cp4_no_secret_or_raw_row_in_trace_or_stdout`, `test_cp2_*` (trace, needs_info, cap T14) |
 
 ## Cá nhân
 
